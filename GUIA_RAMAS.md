@@ -14,8 +14,11 @@ como está organizado:
   para que quede como base de la siguiente.
 - Ramas existentes/planeadas:
   - `semana-08` — Persistencia (binaria, XML, Singleton). ✅ completada.
-  - `semana-11` — Bases de datos (a definir según el plan de estudios).
-  - ... (una por cada semana restante del curso)
+  - `semana-11` a `semana-13` — Persistencia con SABD (MySQL + JDBC).
+  - `semana-14` a `semana-15` — Clases activas: hilos y sockets (chat en red real).
+  - `semana-16` — Repaso / cierre para el examen final.
+
+Ver [`ROADMAP.md`](./ROADMAP.md) para el detalle semana a semana hasta el final del curso.
 
 ## Para los estudiantes
 
