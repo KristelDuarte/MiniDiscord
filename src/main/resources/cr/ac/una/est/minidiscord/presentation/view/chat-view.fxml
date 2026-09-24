@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- VBox es el contenedor raíz. fx:controller enlaza este diseño visual con la clase Java responsable -->
+<VBox spacing="10.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cr.ac.una.est.minidiscord.presentation.controller.ChatViewController">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+
+    <!-- Atributo fx:id le otorga un nombre identificable para ser manipulado desde el controlador -->
+    <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10.0">
+        <!-- onAction delega el comportamiento a una estrategia definida en el archivo Java -->
+        <TextField fx:id="messageInputField" HBox.hgrow="ALWAYS" onAction="#handleSendMessage"/>
+        <Button text="Enviar" onAction="#handleSendMessage"/>
+    </HBox>
+</VBox>
