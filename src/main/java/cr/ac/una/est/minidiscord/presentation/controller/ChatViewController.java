@@ -8,9 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import cr.ac.una.est.minidiscord.data.dao.MessageDAO;
-import cr.ac.una.est.minidiscord.data.dao.MessageXmlExporter;
-import cr.ac.una.est.minidiscord.data.dao.PersistenceManager;
+import cr.ac.una.est.minidiscord.data.dao.MessageRepository;
+import cr.ac.una.est.minidiscord.data.dao.JdbcMessageRepository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +26,16 @@ public class ChatViewController {
     // Colección observable (Implementación nativa del Patrón Observer en JavaFX)
     private final ObservableList<String> messages = FXCollections.observableArrayList();
 
-    private final MessageDAO messageDAO = PersistenceManager.getInstance().getMessageDAO();
-    private final MessageXmlExporter xmlExporter = new MessageXmlExporter();
+    // El campo es del TIPO de la interfaz, la instancia es la implementación JDBC
+    private final MessageRepository messageRepository = new JdbcMessageRepository();
     private final List<Message> historial = new ArrayList<>();
 
     @FXML
     public void initialize() {
         messageListView.setItems(messages);
 
-        for (Message m : messageDAO.cargarTodos()) {
+        // El historial ahora se carga desde MySQL, no desde mensajes.dat
+        for (Message m : messageRepository.obtenerTodos()) {
             historial.add(m);
             messages.add(m.toString());
         }
@@ -50,8 +50,8 @@ public class ChatViewController {
             messages.add(nuevoMsg.toString());
             messageInputField.clear();
 
-            messageDAO.guardarTodos(historial);
-            xmlExporter.exportar(historial);
+            // Se guarda directo en MySQL (un INSERT, no se reescribe todo el historial)
+            messageRepository.guardar(nuevoMsg);
 
         } catch (IllegalArgumentException e) {
             System.out.println("Aviso de Validación: " + e.getMessage());
