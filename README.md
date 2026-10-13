@@ -15,12 +15,8 @@ Aplicación de chat local hecha con **JavaFX + Maven**, empaquetada como módulo
 
 ### Preparar la base de datos
 
-Todo se ejecuta en MySQL Workbench, conectado como `root`, en este orden:
-
-1. `schema.sql` — crea la base `minidiscord` y las tablas `usuarios` y `mensajes`.
-2. `crear_usuario_app.sql` — crea `minidiscord_app`, un usuario que solo puede leer y escribir datos (cambie la clave antes).
-3. `seed.sql` — datos de ejemplo (opcional).
-4. Copie `config.example.properties` como `config.properties` (en la raíz del proyecto) y escriba ahí la clave del paso 2.
+La base de datos se prepara **en MySQL Workbench**, no desde el código Java. La profesora entrega los scripts SQL en un documento aparte.
+Al terminar, copie `config.example.properties` como `config.properties` (en la raíz del proyecto) y escriba ahí el usuario y la clave de la base.
 
 ## Semana 8 — Persistencia completada
 
