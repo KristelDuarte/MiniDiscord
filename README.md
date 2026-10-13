@@ -6,7 +6,23 @@ entrega como evaluación — es el código guía que evoluciona semana a semana.
 
 Aplicación de chat local hecha con **JavaFX + Maven**, empaquetada como módulo Java (JPMS).
 
-## Estado actual: Semana 8 — Persistencia completada
+## Estado actual: Semana 13 — MySQL, interfaz tipo Discord
+
+- Persistencia en **MySQL** por JDBC (`data/dao/JdbcMessageRepository.java`) detrás de la interfaz `MessageRepository`.
+- Credenciales fuera del código: se leen de `config.properties` (no se sube a Git) mediante `DatabaseConfig`.
+- Interfaz con estilo Discord: hoja de estilos `discord.css`, celdas de mensaje con avatar, autor y hora, y diálogo para elegir el nombre de usuario.
+- Persistencia binaria y XML (Semana 8) se conservan como referencia del patrón DAO.
+
+### Preparar la base de datos
+
+Todo se ejecuta en MySQL Workbench, conectado como `root`, en este orden:
+
+1. `schema.sql` — crea la base `minidiscord` y las tablas `usuarios` y `mensajes`.
+2. `crear_usuario_app.sql` — crea `minidiscord_app`, un usuario que solo puede leer y escribir datos (cambie la clave antes).
+3. `seed.sql` — datos de ejemplo (opcional).
+4. Copie `config.example.properties` como `config.properties` (en la raíz del proyecto) y escriba ahí la clave del paso 2.
+
+## Semana 8 — Persistencia completada
 
 - **Parte A** — Persistencia binaria (`data/dao/MessageDAO.java`) con `ObjectOutputStream`/`ObjectInputStream` sobre `mensajes.dat`.
 - **Parte B** — Exportación a XML con DTO (`business/dto/MessageDTO.java` + `data/dao/MessageXmlExporter.java`) usando `XMLEncoder`.
@@ -44,8 +60,8 @@ src/main/java/cr/ac/una/est/minidiscord/
 │   ├── model/                        # Message, User (entidades del dominio)
 │   ├── dto/                          # MessageDTO (para exportar a XML)
 │   └── service/                      # ChatService (reglas de negocio)
-├── data/dao/                         # MessageDAO, MessageXmlExporter, PersistenceManager
-└── presentation/controller/          # ChatViewController (conecta la vista con el negocio)
+├── data/dao/                         # MessageRepository, JdbcMessageRepository, DatabaseConfig, MessageDAO...
+└── presentation/                     # controller/ (ChatViewController) y component/ (MessageCell, Avatars)
 ```
 
 ## Flujo de trabajo semanal (ramas)

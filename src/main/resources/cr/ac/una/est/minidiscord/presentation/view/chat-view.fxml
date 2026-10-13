@@ -1,22 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- VBox es el contenedor raíz. fx:controller enlaza este diseño visual con la clase Java responsable -->
-<VBox spacing="10.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="cr.ac.una.est.minidiscord.presentation.controller.ChatViewController">
-    <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
-    </padding>
+<!-- BorderPane divide la ventana en zonas: left (barra lateral) y center (el chat).
+     fx:controller enlaza este diseño visual con la clase Java responsable.
+     Los estilos viven en discord.css; aquí solo se asignan clases con styleClass. -->
+<BorderPane styleClass="app-root" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cr.ac.una.est.minidiscord.presentation.controller.ChatViewController">
 
-    <!-- Atributo fx:id le otorga un nombre identificable para ser manipulado desde el controlador -->
-    <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"/>
+    <left>
+        <HBox>
+            <!-- Columna angosta de "servidores", como en Discord -->
+            <VBox styleClass="server-rail">
+                <Label text="MD" styleClass="server-icon"/>
+            </VBox>
 
-    <HBox spacing="10.0">
-        <!-- onAction delega el comportamiento a una estrategia definida en el archivo Java -->
-        <TextField fx:id="messageInputField" HBox.hgrow="ALWAYS" onAction="#handleSendMessage"/>
-        <Button text="Enviar" onAction="#handleSendMessage"/>
-    </HBox>
-</VBox>
+            <!-- Lista de canales y panel del usuario -->
+            <VBox styleClass="channel-panel">
+                <Label text="Mini-Discord UNA" styleClass="channel-panel-header" maxWidth="Infinity"/>
+
+                <VBox styleClass="channel-list" VBox.vgrow="ALWAYS">
+                    <Label text="# general" styleClass="channel-item, channel-item-selected" maxWidth="Infinity"/>
+                </VBox>
+
+                <HBox styleClass="user-panel">
+                    <StackPane fx:id="userAvatarHolder"/>
+                    <VBox styleClass="user-info">
+                        <Label fx:id="userNameLabel" styleClass="user-name"/>
+                        <Label text="En línea" styleClass="user-status"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </left>
+
+    <center>
+        <VBox styleClass="chat-area">
+            <HBox styleClass="chat-header">
+                <Label text="#" styleClass="chat-hash"/>
+                <Label text="general" styleClass="chat-title"/>
+            </HBox>
+
+            <!-- Atributo fx:id le otorga un nombre identificable para ser manipulado desde el controlador -->
+            <ListView fx:id="messageListView" styleClass="message-list" VBox.vgrow="ALWAYS"/>
+
+            <!-- Franja roja para errores; el controlador la muestra solo cuando hay un mensaje -->
+            <Label fx:id="statusLabel" styleClass="status-label" maxWidth="Infinity"/>
+
+            <HBox styleClass="input-area">
+                <HBox styleClass="message-input-box" HBox.hgrow="ALWAYS">
+                    <!-- onAction delega el comportamiento a una estrategia definida en el archivo Java.
+                         En un TextField, onAction se dispara al presionar Enter. -->
+                    <TextField fx:id="messageInputField" styleClass="message-input"
+                               promptText="Enviar mensaje a #general"
+                               HBox.hgrow="ALWAYS" onAction="#handleSendMessage"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

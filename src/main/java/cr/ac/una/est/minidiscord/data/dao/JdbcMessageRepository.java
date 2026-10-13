@@ -3,14 +3,22 @@ package cr.ac.una.est.minidiscord.data.dao;
 import cr.ac.una.est.minidiscord.business.model.Message;
 import cr.ac.una.est.minidiscord.business.model.User;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcMessageRepository implements MessageRepository {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/minidiscord";
-    private static final String USUARIO = "root";
-    private static final String CLAVE = "";
+    // Se carga la primera vez que se necesita, no al construir el objeto:
+    // así, si falta config.properties, el error llega al Controller y se muestra en pantalla.
+    private DatabaseConfig config;
+
+    private Connection abrirConexion() throws SQLException {
+        if (config == null) {
+            config = DatabaseConfig.cargar();
+        }
+        return config.getConnection();
+    }
 
     private int obtenerOcrearUsuario(Connection con, String username) throws SQLException {
         try (PreparedStatement buscar = con.prepareStatement("SELECT id FROM usuarios WHERE username = ?")) {
@@ -32,35 +40,38 @@ public class JdbcMessageRepository implements MessageRepository {
 
     @Override
     public void guardar(Message mensaje) {
-        try (Connection con = DriverManager.getConnection(URL, USUARIO, CLAVE)) {
+        try (Connection con = abrirConexion()) {
             int usuarioId = obtenerOcrearUsuario(con, mensaje.getAuthor().getUsername());
             try (PreparedStatement stmt = con.prepareStatement(
-                    "INSERT INTO mensajes (usuario_id, contenido) VALUES (?, ?)")) {
+                    "INSERT INTO mensajes (usuario_id, contenido, fecha_envio) VALUES (?, ?, ?)")) {
                 stmt.setInt(1, usuarioId);
                 stmt.setString(2, mensaje.getContent());
+                stmt.setTimestamp(3, Timestamp.valueOf(mensaje.getSentAt()));
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println("No se pudo guardar en la base de datos: " + e.getMessage());
+            throw new DataAccessException("No se pudo guardar en la base de datos: " + e.getMessage(), e);
         }
     }
 
     @Override
     public List<Message> obtenerTodos() {
         List<Message> resultado = new ArrayList<>();
-        String sql = "SELECT u.username, m.contenido " +
+        String sql = "SELECT u.username, m.contenido, m.fecha_envio " +
                      "FROM mensajes m JOIN usuarios u ON m.usuario_id = u.id " +
-                     "ORDER BY m.fecha_envio";
-        try (Connection con = DriverManager.getConnection(URL, USUARIO, CLAVE);
+                     "ORDER BY m.fecha_envio, m.id";
+        try (Connection con = abrirConexion();
              PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 User autor = new User(rs.getString("username"));
-                resultado.add(new Message(autor, rs.getString("contenido")));
+                Timestamp fecha = rs.getTimestamp("fecha_envio");
+                LocalDateTime enviado = (fecha == null) ? LocalDateTime.now() : fecha.toLocalDateTime();
+                resultado.add(new Message(autor, rs.getString("contenido"), enviado));
             }
         } catch (SQLException e) {
-            System.out.println("No se pudo leer el historial: " + e.getMessage());
+            throw new DataAccessException("No se pudo leer el historial: " + e.getMessage(), e);
         }
         return resultado;
     }
