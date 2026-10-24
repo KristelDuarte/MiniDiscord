@@ -18,7 +18,7 @@ import javafx.scene.layout.StackPane;
 
 public class ChatViewController {
 
-    // La anotación @FXML inyecta los elementos visuales creados en el archivo XML
+    // @FXML conecta estos campos con los elementos del archivo FXML
     @FXML private ListView<Message> messageListView;
     @FXML private TextField messageInputField;
     @FXML private Label statusLabel;
@@ -27,24 +27,24 @@ public class ChatViewController {
 
     private final ChatService chatService = new ChatService();
 
-    // Colección observable (Implementación nativa del Patrón Observer en JavaFX):
-    // cada vez que se agrega un Message, el ListView se actualiza solo.
+    // Lista observable (patrón Observer): cuando se agrega un Message,
+    // el ListView se actualiza solo.
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
 
-    // El campo es del TIPO de la interfaz, la instancia es la implementación JDBC
+    // El campo es del tipo de la interfaz; la instancia es la implementación JDBC.
     private final MessageRepository messageRepository = new JdbcMessageRepository();
 
-    // Lo asigna App después de pedir el nombre en el diálogo inicial.
+    // Lo asigna App después de pedir el nombre.
     private User currentUser;
 
     @FXML
     public void initialize() {
         messageListView.setItems(messages);
 
-        // El cell factory le dice al ListView cómo dibujar cada fila: con una MessageCell nueva.
+        // El cell factory dice cómo dibujar cada fila.
         messageListView.setCellFactory(lista -> new MessageCell());
 
-        // La franja de error solo ocupa espacio mientras tenga texto.
+        // La franja roja solo ocupa espacio mientras tenga texto.
         statusLabel.visibleProperty().bind(statusLabel.textProperty().isNotEmpty());
         statusLabel.managedProperty().bind(statusLabel.visibleProperty());
 
@@ -67,7 +67,7 @@ public class ChatViewController {
         try {
             Message nuevoMsg = chatService.processMessage(currentUser, messageInputField.getText());
 
-            // Primero se guarda: si falla, el mensaje no aparece en pantalla como si se hubiera enviado.
+            // Primero se guarda: si falla, el mensaje no aparece como si se hubiera enviado.
             messageRepository.guardar(nuevoMsg);
 
             messages.add(nuevoMsg);

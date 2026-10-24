@@ -5,8 +5,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-// Fabrica el avatar circular: un círculo de color con la inicial del usuario.
-// Es una clase de utilidad: solo métodos estáticos, por eso no se puede instanciar.
+// Crea el avatar: un círculo de color con la inicial del usuario.
+// Solo tiene métodos estáticos, por eso el constructor es privado.
 public final class Avatars {
 
     private static final Color[] PALETA = {
@@ -17,15 +17,15 @@ public final class Avatars {
     private Avatars() { }
 
     public static StackPane create(String username, double radius) {
-        // El color depende del nombre: el mismo usuario siempre obtiene el mismo color.
-        // floorMod evita índices negativos, porque hashCode() puede devolver un número negativo.
+        // El color sale del nombre: el mismo usuario siempre tiene el mismo color.
+        // Se usa floorMod porque hashCode() puede dar un número negativo.
         int indice = Math.floorMod(username.toLowerCase().hashCode(), PALETA.length);
         Circle circulo = new Circle(radius, PALETA[indice]);
 
         Label inicial = new Label(username.substring(0, 1).toUpperCase());
         inicial.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: " + (radius * 0.95) + "px;");
 
-        // StackPane apila sus hijos uno sobre otro, centrados: la inicial queda encima del círculo.
+        // StackPane pone la inicial encima del círculo.
         return new StackPane(circulo, inicial);
     }
 }

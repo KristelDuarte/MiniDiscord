@@ -8,8 +8,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-// Lee los datos de conexión desde config.properties, un archivo que NO se sube a Git.
-// Así la clave nunca queda escrita en el código fuente ni en el historial del repositorio.
+// Lee los datos de conexión de config.properties, que no se sube a Git.
+// Así la clave no queda escrita en el código ni en GitHub.
 public final class DatabaseConfig {
 
     private static final String ARCHIVO = "config.properties";
@@ -46,7 +46,7 @@ public final class DatabaseConfig {
         return valor.trim();
     }
 
-    // Quien necesita una conexión la pide aquí; nadie más ve el usuario ni la clave.
+    // El resto del programa pide la conexión aquí y nunca ve el usuario ni la clave.
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, usuario, clave);
     }

@@ -16,7 +16,7 @@
     -fx-background-color: #313338;
 }
 
-/* ---------- Columna de servidores ---------- */
+/* Columna de servidores */
 
 .server-rail {
     -fx-background-color: #1e1f22;
@@ -37,7 +37,7 @@
     -fx-font-size: 16px;
 }
 
-/* ---------- Panel de canales ---------- */
+/* Panel de canales */
 
 .channel-panel {
     -fx-background-color: #2b2d31;
@@ -71,7 +71,7 @@
     -fx-text-fill: white;
 }
 
-/* ---------- Panel del usuario ---------- */
+/* Panel del usuario */
 
 .user-panel {
     -fx-background-color: #232428;
@@ -96,7 +96,7 @@
     -fx-font-size: 11px;
 }
 
-/* ---------- Área del chat ---------- */
+/* Área del chat */
 
 .chat-area {
     -fx-background-color: #313338;
@@ -122,7 +122,7 @@
     -fx-font-size: 15px;
 }
 
-/* ---------- Lista de mensajes ---------- */
+/* Lista de mensajes */
 
 .message-list {
     -fx-background-color: transparent;
@@ -193,7 +193,7 @@
     -fx-shape: " ";
 }
 
-/* ---------- Errores ---------- */
+/* Errores */
 
 .status-label {
     -fx-background-color: #f23f42;
@@ -202,7 +202,7 @@
     -fx-wrap-text: true;
 }
 
-/* ---------- Caja de entrada ---------- */
+/* Caja de entrada */
 
 .input-area {
     -fx-padding: 8 16 24 16;
@@ -231,7 +231,7 @@
     -fx-background-insets: 0;
 }
 
-/* ---------- Diálogo de nombre de usuario ---------- */
+/* Diálogo de nombre de usuario */
 
 .dialog-pane {
     -fx-background-color: #313338;

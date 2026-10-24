@@ -9,8 +9,8 @@ import java.util.List;
 
 public class JdbcMessageRepository implements MessageRepository {
 
-    // Se carga la primera vez que se necesita, no al construir el objeto:
-    // así, si falta config.properties, el error llega al Controller y se muestra en pantalla.
+    // La configuración se carga hasta que se necesita, no al crear el objeto:
+    // así, si falta config.properties, el error sale en la ventana.
     private DatabaseConfig config;
 
     private Connection abrirConexion() throws SQLException {

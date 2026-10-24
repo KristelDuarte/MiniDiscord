@@ -11,14 +11,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.time.format.DateTimeFormatter;
 
-// Cada fila del ListView es una celda. ListCell<Message> indica que cada celda dibuja un Message.
-// ListView reutiliza un puñado de celdas mientras uno hace scroll: por eso el dibujo se hace
-// en updateItem y no en el constructor.
+// Cada fila de la lista es una celda; esta dibuja un Message.
+// El ListView reutiliza unas pocas celdas mientras se hace scroll,
+// por eso el dibujo va en updateItem y no en el constructor.
 public class MessageCell extends ListCell<Message> {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    // Espacio horizontal que NO pertenece al texto: avatar (40) + separación (16) + relleno de la celda (32) + barra de scroll.
+    // Espacio que no es del texto: avatar (40) + separación (16) + relleno (32) + barra de scroll.
     private static final double ANCHO_RESERVADO = 110;
 
     private final StackPane contenedorAvatar = new StackPane();
@@ -32,8 +32,8 @@ public class MessageCell extends ListCell<Message> {
         fecha.getStyleClass().add("message-time");
         contenido.getStyleClass().add("message-content");
 
-        // wrapText hace que el texto largo baje de línea en vez de salirse de la ventana.
-        // USE_PREF_SIZE en la altura mínima evita que JavaFX recorte el texto con "...".
+        // wrapText: el texto largo baja de línea en vez de salirse de la ventana.
+        // USE_PREF_SIZE: evita que JavaFX corte el texto con "...".
         contenido.setWrapText(true);
         contenido.setMinHeight(Region.USE_PREF_SIZE);
 
@@ -46,13 +46,13 @@ public class MessageCell extends ListCell<Message> {
         raiz = new HBox(16, contenedorAvatar, texto);
         raiz.setAlignment(Pos.TOP_LEFT);
 
-        // Prefiere ancho 0 para que la celda tome el ancho del ListView y no el del texto sin cortar.
+        // Ancho preferido 0: la celda toma el ancho de la lista y no el del texto.
         setPrefWidth(0);
     }
 
     @Override
     protected void updateItem(Message mensaje, boolean vacia) {
-        // Obligatorio: la clase padre actualiza su propio estado interno.
+        // Obligatorio: la clase padre actualiza su propio estado.
         super.updateItem(mensaje, vacia);
 
         if (vacia || mensaje == null) {
@@ -66,7 +66,7 @@ public class MessageCell extends ListCell<Message> {
         contenido.setText(mensaje.getContent());
         contenedorAvatar.getChildren().setAll(Avatars.create(username, 20));
 
-        // El ancho máximo del texto sigue al ancho de la lista: al cambiar el tamaño de la ventana, se reacomoda.
+        // El texto se ajusta al ancho de la lista cuando cambia el tamaño de la ventana.
         contenido.maxWidthProperty().bind(getListView().widthProperty().subtract(ANCHO_RESERVADO));
 
         setGraphic(raiz);

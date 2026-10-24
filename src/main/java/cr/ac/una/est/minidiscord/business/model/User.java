@@ -2,10 +2,10 @@ package cr.ac.una.est.minidiscord.business.model;
 
 import java.io.Serializable;
 
-// Se implementa Serializable para poder convertir la instancia en bytes y almacenarla en disco.
+// Serializable permite guardar el objeto en disco como bytes.
 public class User implements Serializable {
 
-    // La propiedad 'final' garantiza inmutabilidad: el username no cambiará tras ser instanciado.
+    // final: el username no cambia una vez creado el usuario.
     private final String username;
 
     public User(String username) {

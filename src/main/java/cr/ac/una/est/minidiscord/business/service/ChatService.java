@@ -6,8 +6,8 @@ import cr.ac.una.est.minidiscord.business.model.User;
 
 public class ChatService {
 
-    // Estos límites replican las columnas de la base de datos: VARCHAR(50) y VARCHAR(500).
-    // Validarlos aquí evita que MySQL rechace el INSERT con un error menos claro.
+    // Mismos límites que las columnas de la base: VARCHAR(50) y VARCHAR(500).
+    // Así el error sale claro y no el de MySQL.
     public static final int MAX_USERNAME = 50;
     public static final int MAX_MESSAGE = 500;
 
@@ -24,13 +24,13 @@ public class ChatService {
 
     public Message processMessage(User sender, String text) {
 
-        // La validación de negocio rechaza textos vacíos lanzando una excepción matemática.
-        // La capa de negocio NUNCA debe modificar ventanas de alerta gráficas directamente.
+        // El texto vacío no se acepta: se lanza una excepción.
+        // Esta capa solo valida; no toca la ventana.
         if (text == null || text.trim().isEmpty()) {
             throw new IllegalArgumentException("El mensaje no puede estar vacío.");
         }
 
-        // La regla de formato indica que los espacios laterales se eliminan al construir.
+        // Se quitan los espacios del inicio y del final.
         String limpio = text.trim();
         if (limpio.length() > MAX_MESSAGE) {
             throw new IllegalArgumentException("El mensaje no puede superar los " + MAX_MESSAGE + " caracteres.");
